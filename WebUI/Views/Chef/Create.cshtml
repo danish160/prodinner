@@ -1,0 +1,7 @@
+﻿@model ChefInput
+@using (Html.BeginForm())
+{    
+    @Html.EditorFor(o => o.FirstName) 
+    @Html.EditorFor(o => o.LastName)         
+    @Html.EditorFor(o => o.CountryId)          
+}

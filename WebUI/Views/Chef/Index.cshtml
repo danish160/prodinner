@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Chefs";
+}
+<h2>@Mui.Chef</h2>
+@Html.InitCrudPopupsForGrid("ChefGrid", "Chef", 300)
+
+<div class="bar">
+    <div class="fr">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+    <button type="button" onclick="awe.open('createChefGrid')" class="awe-btn mbtn">@Mui.Create</button>
+</div>
+@(Html.Awe().Grid("ChefGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Persistence(Persistence.Session)
+      .Height(300)
+      .Columns(
+          new Column{Name = "Id", Width = 70},
+          new Column{Name = "FirstName,LastName", ClientFormat = ".FirstName .LastName", Header = "Name"},
+          new Column{Name = "Country.Name", ClientFormat = ".Country", Header = "Country" },
+          new Column{ClientFormat = GridUtils.EditFormat("editChefGrid"), Width = 50},
+          new Column{ClientFormatFunc = "utils.deleteFormat('deleteChefGrid','ChefGrid')", Width = 50 }))

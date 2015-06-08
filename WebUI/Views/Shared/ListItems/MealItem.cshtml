@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Meal>
+@foreach (var o in Model)
+{
+    <li class="awe-li mealitem awe-il" data-val="@o.Id">
+        <div>
+            <button class="awe-btn awe-movebtn mealmove">
+                <span class="awe-icon"></span>
+            </button>
+            @o.Name
+        </div>
+        <img  src='@Url.Content("~/pictures/Meals/" + (string.IsNullOrEmpty(o.Picture) ? "0.jpg" : o.Picture))' class="thumb"  alt='picture' />
+    </li>
+}

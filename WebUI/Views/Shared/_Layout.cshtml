@@ -1,0 +1,84 @@
+﻿@using System.Threading
+@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        @ViewBag.Title - ProDinner ASP.net MVC Awesome Demo Application
+    </title>
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon" />
+    @{
+        var settings = SettingsController.ReadSettings(HttpContext.Current.Request);
+    }
+    
+    <link href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/" + settings.Theme + "/AwesomeMvc.css?v=100")" rel="stylesheet" type="text/css" id="aweStyle" />
+    <link href="@Url.Content("~/Content/themes/" + settings.Theme + "/mods.css")" rel="stylesheet" type="text/css" id="modsStyle" />
+    <link href="@Url.Content("~/Content/Common.css")?v=100" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+<body>
+    <noscript>
+        <div id="nos">
+            this site works best with javascript allowed
+        </div>
+    </noscript>
+    <div id="header">
+        <div class="cont">
+            <ul class="menu">
+                <li><a id='logo' href="@Url.Content("~")"><i></i></a></li>
+                <li class="optional">@Html.ActionLink(Mui.Home, "Index", "Home")</li>
+                <li>@Html.ActionLink(Mui.Meals, "Index", "Meal")</li>
+                @if (User.IsInRole("admin"))
+                {
+                    <li>@Html.ActionLink("Users", "Index", "User")</li>
+                }
+                <li>@Html.ActionLink(Mui.Stuff, "Index", "Stuff")</li>
+                <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
+                <li>@Html.Awe().PopupActionLink().LinkText(Mui.About).Url(Url.Action("About", "Home")).Fullscreen(true).Modal(true)</li>
+            </ul>
+            <ul class="menu" style="float: right;">
+                <li>@Html.Partial("login")</li>
+            </ul>
+        </div>
+    </div>
+    <div id="main" class="cont">
+        <div class="awe-il settings">
+            <button type="button" id="chDog" class="awe-btn mbtn2">hide dog</button>
+            @Html.Action("Index", "Settings")
+        </div>
+
+        @RenderBody()
+    </div>
+    <div id="footer">
+        <div class="cont">
+            <span><a href='http://prodinner.codeplex.com'>project home: http://prodinner.codeplex.com</a></span>
+        </div>
+    </div>
+    @Html.Partial("doghelp")
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js" type="text/javascript"></script>
+    @Scripts.Render("~/bundle/Scripts/js")
+
+    <script type="text/javascript">
+        var root = '@(Url.Content("~"))';
+        var isMobileOrTablet = '@(ClientUtils.IsMobileOrTablet())' == "True";
+        var dateFormat = '@(AweUtil.ConvertTojQueryDateFormat(Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern))';
+        awem.clientDict = @Html.Raw(Json.Encode(ClientUtils.GetClientDict()));
+                
+        utils.init(dateFormat, isMobileOrTablet);
+        awe.gmd = [awem.gridLoading, awem.gridPageInfo];// set global grid mods
+            
+        var controller = '@(ViewContext.RouteData.Values["Controller"].ToString().ToLower())';
+        var action = '@(ViewContext.RouteData.Values["Action"].ToString().ToLower())';
+        $(function () {
+            documentReady(root, controller, action);
+        });
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js" type="text/javascript" async></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+</body>
+</html>

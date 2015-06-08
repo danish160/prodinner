@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Meals";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Mui.Meals</h2>
+
+@Html.InitCrudPopupsForAjaxList("MealsList", "Meal", "Id", "Meal", "adjustMeals")
+
+@(Html.Awe().InitPopup()
+            .Name("changePicture")
+            .Url(Url.Action("ChangePicture"))
+            .RemoveOnClose(false)
+            .Fullscreen(true))
+
+<div class="bar">
+    <div class="fr">
+        @Html.Awe().TextBox("Search").Placeholder(Mui.Search).CssClass("searchtxt")
+    </div>
+    <button type="button" class="awe-btn mbtn" onclick="awe.open('createMeal')">
+        @Mui.Create
+    </button>
+</div>
+
+@(Html.Awe().AjaxList("MealsList")
+            .Url(Url.Action("Search", "MealsAjaxList"))
+            .CssClass("mealslist")
+            .HtmlAttributes(new { style = "margin: 0 -5px;" })
+            .Parent("Search", "search")
+            .ParameterFunc("getMealsAlPageSize"))
+
+<script type="text/javascript">
+    //called after changing picture
+    function updateMeal(id) {
+        $.post('@Url.Action("GetMeal")', { id: id }, function (res) {
+            utils.itemEditedAl('MealsList', 'Id', adjustMeals)(res);
+        });
+    }
+
+    $(function () {
+        $(document).ajaxComplete(adjustMeals);
+        $(window).resize(adjustMeals);
+    });
+
+    function getMealsAlPageSize() {
+        var w = $('#MealsList').width();
+        var mealWidth = 450;
+        if (w < mealWidth) mealWidth = w - 20;
+        var countPerRow = parseInt(w / mealWidth, 10);
+        var rows = parseInt(10 / countPerRow, 10);
+        var pageSize = Math.max(rows, 1) * countPerRow;
+
+        return { pageSize: pageSize };
+    }
+
+    // adjusts the layout of the meal items
+    function adjustMeals() {
+        if ($.support.cors)
+            $(".notcool").hide();
+        else
+            $(".cool").hide();
+
+        var w = $('#MealsList').width();
+        var mw = 450;
+        if (w < mw) mw = w - 20;
+        var count = Math.floor(w / mw);
+        var rest = w % mw;
+        var nw = mw + (rest / count) - 10;
+        $('.meal').css('width', nw + 'px');
+        $('.comments').css('width', $('.comments:first').parent().width() - $('.comments:first').prev().width() - 20);
+    }
+</script>
+<link href="@Url.Content("~/Content/jquery.fileupload-ui.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/jquery.Jcrop.css")" rel="stylesheet" type="text/css" />
+
+<script src="@Url.Content("~/Scripts/jquery.fileupload.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.fileupload-ui.js")" type="text/javascript"></script>
+<script src='@Url.Content("~/Scripts/jquery.Jcrop.min.js")' type="text/javascript" ></script>

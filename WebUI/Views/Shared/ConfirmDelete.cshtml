@@ -1,0 +1,27 @@
+﻿@model Omu.ProDinner.WebUI.ViewModels.Input.DeleteConfirmInput
+
+@using (Html.BeginForm())
+{
+    @Model.Message
+}
+<input type="hidden" id="popupPivot@(Model.Id)"/>
+
+@if (Model.GridId != null)
+{
+    <script>
+        (function() {
+            var rows = $('#@(Model.GridId)').data('api').select(@(Model.Id));
+            
+            $.map(rows, function(row) {
+                row.data('initbc', row.css('background-color'));
+                row.animate({ 'background-color': '#FFEC9E' });
+            });
+
+            $('#popupPivot@(Model.Id)').closest('.awe-popup').on('aweclose', function() {
+                $.map(rows, function(row) {
+                    row.animate({ 'background-color': row.data('initbc') });
+                });
+            });
+        })();
+    </script>
+}

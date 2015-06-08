@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Countries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Mui.Country</h2>
+@Html.InitCrudPopupsForGrid("CountryGrid", "Country", 200)
+
+<div class="bar">
+    <div class="fr">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+    <button type="button" onclick="awe.open('createCountryGrid')" class="awe-btn mbtn">@Mui.Create</button>
+</div>
+
+@(Html.Awe().Grid("CountryGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Persistence(Persistence.Session)
+      .Height(300)
+      .Groupable(false)
+      .Columns(
+          new Column{Name = "Id", Width = 70},
+          new Column{Name = "Name"},
+          new Column{ClientFormat = GridUtils.EditFormat("editCountryGrid"), Width = 50},
+          new Column{ClientFormatFunc = "utils.deleteFormat('deleteCountryGrid','CountryGrid')", Width = 50 }))

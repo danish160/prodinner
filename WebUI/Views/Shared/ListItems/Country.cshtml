@@ -1,0 +1,15 @@
+﻿@using Omu.ProDinner.WebUI.ViewModels.Display
+@model IEnumerable<Country>
+@foreach (var o in Model)
+{
+    <li class="awe-li" data-val="@(o.Id)" style="position: relative;"> @* data-val required by the lookup, used to select item *@
+    @o.Name
+        <div class="act">
+            <button class="awe-btn" onclick="awe.open('editLookupCountry', { params: { id: @(o.Id) }})">
+                <span class="ico-edit"></span>
+            </button>
+            &nbsp;
+            @Html.Partial("deletebtn", new DelBtn { Id = o.Id, IsDeleted = o.IsDeleted, Name = "LookupCountry" })
+        </div>
+    </li>
+}

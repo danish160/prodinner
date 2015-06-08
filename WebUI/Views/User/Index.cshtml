@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Users</h2>
+
+@(Html.InitCrudPopupsForGrid("UserGrid", "User", createPopupHeight:350))
+
+@(Html.Awe().InitPopupForm()
+            .Name("changePassword")
+            .Height(200)
+            .Url(Url.Action("ChangePassword"))
+            .Success("passchanged"))
+
+<div class="bar">
+    <div class="fr">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+    <button type="button" onclick="awe.open('createUserGrid')" class="awe-btn mbtn">@Mui.Create</button>
+</div>
+@(Html.Awe().Grid("UserGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Persistence(Persistence.Session)
+      .Height(300)
+      .Groupable(false)
+      .Columns(
+          new Column{Name = "Id", Width = 70},
+          new Column{Name = "Login"},
+          new Column{ClientFormat = ".Roles", Header = "Roles"},
+          new Column{ClientFormat = GridUtils.ChangePasswordFormat("changePassword"), Width = 150},
+          new Column{ClientFormat = GridUtils.EditFormatForGrid("UserGrid"), Width = 50},
+          new Column{ClientFormatFunc = "utils.deleteFormat('deleteUserGrid','UserGrid')", Width = 50 }))

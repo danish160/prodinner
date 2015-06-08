@@ -1,0 +1,8 @@
+@using Omu.ProDinner.WebUI.Helpers.Awesome
+@model SettingsInput
+<div class="setting"> @Html.Awe().AjaxRadioList("chTheme").Odropdown(o => o.InLabel("Theme: ")).DataFunc("utils.getItems(themes)").Value(Model.SelectedTheme) </div>
+<div class="setting"> @Html.Awe().AjaxRadioList("chLang").Odropdown(o => o.InLabel("Language: ")).DataFunc("utils.getItems(langs)").Value(Model.SelectedLang) </div>
+<script>
+    var themes = @Html.Raw(Json.Encode(Model.Themes));
+    var langs = @Html.Raw(Json.Encode(Model.Langs));
+</script>

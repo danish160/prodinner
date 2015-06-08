@@ -1,0 +1,43 @@
+﻿@using System.Threading
+@using Omu.ProDinner.WebUI.ViewModels.Display
+@model IEnumerable<Dinner>
+
+@{
+    var dtformat = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
+    var format = dtformat.ShortDatePattern + " " + dtformat.ShortTimePattern;
+}
+@foreach (var o in Model)
+{
+    <li data-val='@(o.Id)' class="awe-li dinner">
+<div class="fr">    
+@Html.Partial("deletebtn", new DelBtn { Id = o.Id, IsDeleted = o.IsDeleted, Name = "Dinner" })
+    </div>
+    <div class="fl">
+        @o.Name</div>
+    <div class="fr">
+        @o.Chef.FirstName
+        @o.Chef.LastName
+        @Mui.from
+        @o.Chef.Country.Name
+        @Mui.is_cooking&nbsp;</div>
+        
+    <br class="cbt" />
+    @foreach (var m in o.Meals)
+    {
+        <img src='@Url.Content("~/pictures/Meals/s" + (m.Picture ?? "0.jpg"))' class="sthumb" alt='@m.Name' />
+    }
+    <br class="cbt" />    
+    <div class="fl">
+        @o.Country.Name,
+        @o.Address</div>        
+        <div class="fr">
+            <button type="button" class="awe-btn" onclick="awe.open('editDinner', { params:{ id: @(o.Id) }})">
+                <span class=" ico-edit"></span>
+            </button>
+        </div>    
+        <div class="fr" style="margin-right: 1em;">
+            @Mui.Start @(o.Start.ToString(format)) @Mui.End @(o.End.ToString(format)) 
+        </div> 
+    <br class="cbt" />    
+</li>
+}

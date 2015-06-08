@@ -1,0 +1,10 @@
+﻿@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    <span class="optional" style="vertical-align: middle;">Welcome</span>
+    <span style="vertical-align: middle;">@HttpContext.Current.User.Identity.Name</span>
+    @Html.ActionLink("Log out", "SignOff", "account")
+}
+else
+{
+    @Html.ActionLink("log in", "SignIn", "account")
+}

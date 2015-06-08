@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Dinners grid view";
+}
+
+<h2>@Mui.host_a_dinner</h2>
+@Html.InitCrudPopupsForGrid("DinnerGrid", "Dinner", fullScreen:true)
+
+<div class="bar">
+    <div class="fr">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+    <button type="button" onclick="awe.open('createDinnerGrid')" class="awe-btn mbtn">@Mui.Create</button>
+</div>
+@(Html.Awe().Grid("DinnerGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Resizable(true)
+      .Height(400)
+      .ColumnWidth(120)
+      .Nests(new Nest{ ButtonClass = "detailbtn", Url = Url.Action("Details") })
+      .Columns(
+          new Column{ClientFormat = "<div class='detailbtn'><i class='ui-icon ui-icon-triangle-1-e awe-il'></i> .Id</div>", Width = 80, Header = "Id", Resizable = false},
+          new Column{Name = "Name"},
+          new Column{Name = "Chef.FirstName,Chef.LastName", ClientFormat = ".ChefName", Header = "Chef"},          
+          new Column{Name = "Country.Name", ClientFormat = ".CountryName", Header = "Country"},
+          new Column{Name = "Address"},
+          new Column{Name = "Meals.Count", ClientFormat = ".MealsCount", Header = "Meals", Width = 80, Resizable = false},
+          new Column{ClientFormat = GridUtils.EditFormat("editDinnerGrid"), Width = 50, Resizable = false},
+          new Column{ClientFormatFunc = "utils.deleteFormat('deleteDinnerGrid','DinnerGrid')", Width = 50, Resizable = false}))

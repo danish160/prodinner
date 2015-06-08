@@ -1,0 +1,12 @@
+<ul id="menu">
+    <li>@Html.ActionLink(Mui.Home, "Index", "Home")</li>           
+    <li>@Html.ActionLink(Mui.Meals, "Index", "Meal")</li>
+    @if (User.IsInRole("admin"))
+    {
+    <li>@Html.ActionLink("Users", "Index", "User")</li>
+    }
+    <li>@Html.ActionLink(Mui.Stuff, "Index", "Stuff")</li>
+    <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
+    <li>@Html.Awe().PopupActionLink().LinkText(Mui.About).Url(Url.Action("About","Home")).Fullscreen(true).Modal(true)    
+</ul>
+

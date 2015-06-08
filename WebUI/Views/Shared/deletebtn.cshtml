@@ -1,0 +1,13 @@
+﻿@model Omu.ProDinner.WebUI.ViewModels.Display.DelBtn
+@if (Model.IsDeleted)
+{
+    <button type="button" class="awe-btn" onclick="awe.oc('restore@(Model.Name)', { params: { id: @(Model.Id) } })">
+        <span class="ico-restore"></span>
+    </button>
+}
+else
+{
+    <button type="button" class="awe-btn" onclick="awe.open('delete@(Model.Name)', { params: { id: @(Model.Id) } })">
+        <span class="ico-del"></span>
+    </button>
+}

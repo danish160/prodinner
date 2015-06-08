@@ -1,0 +1,62 @@
+﻿@model Omu.ProDinner.WebUI.ViewModels.Input.CropInput
+@{
+    ViewBag.Title = "Picture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/Content/jquery.Jcrop.css")" rel="stylesheet" type="text/css" />
+<script src='@Url.Content("~/Scripts/jquery.Jcrop.min.js")' type="text/javascript" ></script>
+
+<script language="Javascript" type="text/javascript">
+
+        $(function() {
+            $('#cropbox').Jcrop({
+                setSelect: [ 0, 0, 200, 150 ],
+                onChange: showPreview,
+                onSelect: showPreview,
+                aspectRatio: 1.333
+            });
+        });
+        
+         function updateCoords(c) {
+		        $('#x').val(c.x);
+		        $('#y').val(c.y);
+		        $('#w').val(c.w);
+		        $('#h').val(c.h);
+		    }
+
+        function showPreview(coords) {
+        updateCoords(coords);
+        
+            if (parseInt(coords.w) > 0) {
+                var rx = 200 / coords.w;
+                var ry = 150 / coords.h;
+
+                $('#preview').css({
+                    width: Math.round(rx * @Model.ImageWidth) + 'px',
+                    height: Math.round(ry * @Model.ImageHeight) + 'px',
+                    marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                    marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                });
+            }
+        }		
+</script>
+<div style="margin: auto; width: 900px;">
+    <div style="float: left;">
+        <img src='@Url.Content("~/pictures/temp/" + Model.FileName)' id="cropbox" alt="crop" />
+    </div>
+    <div style="width: 200px; height: 150px; overflow: hidden; float: right;">
+        <img src='@Url.Content("~/pictures/temp/" + Model.FileName)' id="preview" alt="thumb" />
+    </div>
+    <br class="cbt" />
+    <br />
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" id="x" name="x" />
+        <input type="hidden" id="y" name="y" />
+        <input type="hidden" id="w" name="w" />
+        <input type="hidden" id="h" name="h" />
+        <input type="hidden" id="filename" name="@Model.FileName" />
+        <input type="hidden" id="id" name="@Model.Id" />
+        <input type="submit" value="@Mui.select_thumbnail" />
+    }
+</div>

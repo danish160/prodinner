@@ -1,0 +1,45 @@
+﻿@model SignInInput
+@{
+    ViewBag.Title = "SignIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User access</h2>
+<div style="margin: auto;" class="card">
+    @using (Html.BeginForm())
+    { 
+        @Html.EditorFor(o => o.Login)
+        @Html.EditorFor(o => o.Password)
+        @Html.EditorFor(o => o.Remember)
+        <div class="efield">
+            <div class="elabel">&nbsp;</div>
+            <div class="einput">
+                <input type='submit' value='Sign in' class="awe-btn mbtn" style="width: 231px;" />
+            </div>
+        </div>    
+    }
+</div>
+
+@Html.ValidationSummary(true)
+<div class="explain">
+    <p>Login: o</p>
+    <p>Password: 1</p>
+    <p>o has the admin role, admins can manage users and restore everything that was deleted</p>
+    <p>o is embeded in the code so you won't see him in the users list (unless somebody adds him)</p>
+</div>
+<style>
+    .card
+    {
+        background-color: #f7f7f7;
+        padding: 20px 25px 30px;
+        margin: 0 auto 25px;
+        width: 304px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        width: 500px;
+    }
+</style>

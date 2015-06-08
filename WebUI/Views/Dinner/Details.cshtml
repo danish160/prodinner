@@ -1,0 +1,8 @@
+﻿@model Dinner
+<div style="text-align: right;padding-right: 10px;">
+    starts: @Model.Start.ToString("dd MMMM yyyy hh:ss")
+    duration: @((Model.End - Model.Start).TotalMinutes) minutes
+</div>
+<div style="margin: 0 0 10px 10px;">
+@foreach (var m in Model.Meals){<img src='@Url.Content("~/pictures/Meals/s" + (m.Picture ?? "0.jpg"))' class="sthumb" alt='@m.Name' />}
+</div>

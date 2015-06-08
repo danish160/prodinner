@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+@(Html.Awe().InitPopupForm()
+            .Name("createLookupCountry")
+            .Url(Url.Action("Create","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("utils.lookupCreated")
+            .Modal(true)
+            .Height(200))
+
+@(Html.Awe().InitPopupForm()
+            .Name("editLookupCountry")
+            .Url(Url.Action("Edit","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("utils.lookupEdited('Id')")
+            .Modal(true)
+            .Height(200))
+
+@(Html.Awe().InitPopupForm()
+            .Name("deleteLookupCountry")
+            .Url(Url.Action("Delete","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("utils.lookupDeleted('Id')")
+            .Modal(true)
+            .Height(200))
+
+@(Html.Awe().InitCall("restoreLookupCountry")
+            .Url(Url.Action("Restore","Country"))
+            .Success("utils.lookupEdited('Id')"))
+
+<div class="einput">
+    <input type="text" name="search" class="awe-searchtxt" placeholder="search..." /></div>
+<button type="button" class="awe-searchbtn awe-btn">Search</button>
+<button type="button" class="awe-btn mbtn" onclick="awe.open('createLookupCountry')">Create</button>

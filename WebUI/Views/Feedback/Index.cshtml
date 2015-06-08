@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    p {
+        margin: 0;
+    }
+</style>
+
+<h2>Feedback</h2>
+<br/>
+@(Html.Awe().InitPopupForm()
+            .Name("createFeedback")
+            .Url(Url.Action("Create"))
+            .Success("reload")
+            .Height(520)
+            .Width(900))
+
+<button class="awe-btn mbtn" onclick="awe.open('createFeedback')">@Mui.Create</button>
+
+@Html.Awe().AjaxList("Feedback").CssClass("flist")
+
+<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<script>
+    function reload() {
+        $('#Feedback').data('api').load({ });
+    }
+</script>

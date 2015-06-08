@@ -1,0 +1,7 @@
+﻿@model Omu.ProDinner.WebUI.ViewModels.Input.UserCreateInput
+@using (Html.BeginForm())
+{
+    @Html.EditorFor(o => o.Login)
+    @Html.EditorFor(o => o.Password)
+    @Html.EditorFor(o => o.Roles)
+}

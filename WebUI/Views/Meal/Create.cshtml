@@ -1,0 +1,7 @@
+﻿@model MealInput
+@using (Html.BeginForm())
+{  
+    @Html.EditorFor(o => o.Name)
+    <div class="efield">@Mui.Comments :@Html.ValidationMessageFor(o => o.Comments)</div>
+    @Html.TextAreaFor(o => o.Comments, new{ style="width:100%"})
+}

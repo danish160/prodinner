@@ -1,0 +1,31 @@
+﻿@using Omu.ProDinner.WebUI.ViewModels.Display
+@model IEnumerable<Meal>
+@foreach (var o in Model)
+{
+    <li data-val='@(o.Id)' class="awe-li meal awe-il">
+        <div>@o.Name
+            <div class="fr">
+                @Html.Partial("deletebtn", new DelBtn { Id = o.Id, IsDeleted = o.IsDeleted, Name = "Meal" })
+            </div>
+        </div>
+        <div>
+            <div class="fl">
+                <img  src='@Url.Content("~/pictures/Meals/" + (string.IsNullOrEmpty(o.Picture) ? "0.jpg" : o.Picture))' class="thumb"  alt='picture' /></div>
+            <div class="comments">@o.Comments</div>
+            <br class="cbt" />
+        </div>
+        <div class="cbt" style="margin-top: 0.5em;">
+            <div class='cool fl'>
+                <button type="button" class="awe-btn" onclick="awe.open('changePicture', { params: { id: @(o.Id) }})" style="padding:0.1em 0.3em">@Mui.change_picture</button>
+            </div>
+            <div class='notcool fl'>                
+                <button type="button" class="awe-btn" onclick="location.href='@Url.Action("ochangepicture", "Meal", new { o.Id })'">@Mui.change_picture</button>
+            </div>
+            <div class="fr">
+                <button type="button" class="awe-btn" onclick="awe.open('editMeal', { params:{ id:  @(o.Id) } })" style="padding:0.1em 0.3em">
+                    <span class="ico-edit"></span>
+                </button>
+            </div>
+        </div>
+    </li>
+}

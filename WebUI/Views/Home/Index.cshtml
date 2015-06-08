@@ -1,0 +1,48 @@
+﻿@using Omu.ProDinner.WebUI.Controllers.Awesome
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Prodinner, where pros eat";
+}
+<h2>Pr0Dinn3r, wh3r3 pr0s e4t</h2>
+
+<div class="efield" style="line-height: initial">
+    <div class="einput">
+        <div>@Mui.Name:</div>
+        @(Html.Awe().Autocomplete("DinnerName")
+              .Placeholder("name")
+              .Controller<DinnerAutocompleteController>()
+              .CssClass("searchtxt")
+              .GeneratePropId(false)
+              .Parent("searchChefId", "chef")
+              .Parent("searchMeals", "meals"))
+    </div>
+    <div class="einput">
+        <div>@Mui.Chef:</div>
+        @Html.Awe().Odropdown("Chef").Url(Url.Action("GetChefs", "Data")).Parameter("any", true)
+    </div>
+    <div class="einput">
+        <div>@Mui.Meals:</div>
+        @(Html.Awe().MultiLookup("Meals")
+              .HtmlAttributes(new {style="font-size:1.15em;"})
+              .Prefix("search")
+              .PopupClass("mealsLookup")
+              .Fullscreen(true)
+              .ClearButton(true)
+              .DragAndDrop(true)
+              .ParameterFunc("getMealsLookupPageSize"))
+    </div>
+</div>
+
+<div class="bar">
+    <button type="button" class="awe-btn mbtn" onclick="awe.open('createDinner')">@Mui.host_a_dinner</button>
+    <div class="fr"><a href="@Url.Action("Index", "Dinner")" class="awe-btn mbtn">See Dinners Grid</a> </div>
+</div>
+
+@(Html.Awe().AjaxList("DinnersList")
+        .Url(Url.Action("Search", "DinnersAjaxList"))
+        .CssClass("flist")
+        .Parent("DinnerName", "search")
+        .Parent("Chef", "chef")
+        .Parent("searchMeals", "meals"))
+
+@Html.InitCrudPopupsForAjaxList("DinnersList", "Home", "Id", "Dinner", fullScreen: true)

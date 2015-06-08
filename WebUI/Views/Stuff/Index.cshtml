@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Mui.Stuff</h2>
+<div style="margin-left: 5px;">
+<p>
+@Html.ActionLink(@Mui.Country, "Index","Country")
+</p>
+    <p>
+        @Html.ActionLink(@Mui.Chef, "Index","Chef")
+    </p>
+<p>
+    @Html.ActionLink("Dinners", "Index","Dinner")
+</p>
+</div>

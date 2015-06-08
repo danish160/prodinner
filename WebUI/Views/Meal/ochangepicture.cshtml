@@ -1,0 +1,15 @@
+﻿@model Meal
+@{
+    ViewBag.Title = "Picture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>
+    @Mui.Picture @Model.Name</h2>
+
+ <img  src='@Url.Content("~/pictures/Meals/"+Model.Picture)'  alt='picture' />
+@using (Html.BeginForm("ochangepicture", "Meal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{     
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="file" id="fileUpload" name="fileUpload" />
+    <input type="submit" value="@Mui.upload_file" />   
+}
