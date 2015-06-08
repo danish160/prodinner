@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+
+using Omu.AwesomeMvc;
 using Omu.ProDinner.Core.Model;
+using Omu.ProDinner.Core.Repository;
 using Omu.ProDinner.Core.Service;
 using Omu.ProDinner.WebUI.Dto;
 using Omu.ProDinner.WebUI.Mappers;
@@ -10,17 +13,38 @@ namespace Omu.ProDinner.WebUI.Controllers
 {
     public class ChefController : Cruder<Chef, ChefInput>
     {
-        public ChefController(ICrudService<Chef> s, IMapper<Chef, ChefInput> v)
-            : base(s, v)
-        {
-        }
-        public virtual ActionResult Search(string search, int? countryId, int page = 1, int ps = 5)
-        {
-            var src = s.Where(o => o.FirstName.StartsWith(search) || o.LastName.StartsWith(search), User.IsInRole("admin"));
-            if (countryId != null) src = src.Where(o => o.CountryId == countryId);
-            var rows = this.RenderView("rows", src.OrderBy(u => u.Id).Skip((page - 1) * ps).Take(ps));
+        private readonly IRepo<Chef> chefRepo;
 
-            return Json(new { rows, more = src.Count() > page * ps });
+        public ChefController(ICrudService<Chef> service, IMapper<Chef, ChefInput> v, IRepo<Chef> chefRepo)
+            : base(service, v)
+        {
+            this.chefRepo = chefRepo;
+        }
+
+        protected override object MapEntityToGridModel(Chef chef)
+        {
+            return new { chef.Id, chef.FirstName, chef.LastName, Country = chef.Country.Name, chef.IsDeleted };
+        }
+
+        public ActionResult GridGetItems(GridParams g, string parent, bool? restore)
+        {
+            var isAdmin = User.IsInRole("admin");
+
+            var data = chefRepo.Where(o => o.FirstName.StartsWith(parent) || o.LastName.StartsWith(parent), isAdmin);
+
+            if (restore.HasValue && isAdmin)
+            {
+                service.Restore(Convert.ToInt32(g.Key));
+            }
+
+            var model = new GridModelBuilder<Chef>(data.AsQueryable(), g)
+                    {
+                        Key = "Id",
+                        Map = MapEntityToGridModel,
+                        GetItem = () => chefRepo.Get(Convert.ToInt32(g.Key))
+                    }.Build();
+
+            return Json(model);
         }
     }
 }

@@ -1,43 +1,55 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+using Omu.AwesomeMvc;
 using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Repository;
 
 namespace Omu.ProDinner.WebUI.Controllers
 {
-    public class MealsLookupController : LookupController
+    public class MealsMultiLookupController : Controller
     {
-        private readonly IRepo<Meal> r;
+        private readonly IRepo<Meal> repo;
 
-        public MealsLookupController(IRepo<Meal> r)
+        public MealsMultiLookupController(IRepo<Meal> repo)
         {
-            this.r = r;
+            this.repo = repo;
         }
 
-        [HttpPost]
-        public ActionResult Search(string search, IEnumerable<int> selected, int page)
+        public ActionResult Search(string search, int[] selected, int page, int? pageSize)
         {
-            const int pageSize = 9;
-            var result = r.Where(o => o.Name.Contains(search)).OrderByDescending(o => o.Id)
-                .Where(o => selected == null || !selected.Contains(o.Id));
+            pageSize = pageSize ?? 10;
+            var list = repo.Where(o => o.Name.Contains(search));
 
-            var rows = this.RenderView(@"Awesome\LookupList", result.Skip((page - 1) * pageSize).Take(pageSize));
+            if (selected != null) list = list.Where(o => !selected.Contains(o.Id)).AsQueryable();
+            list = list.OrderByDescending(o => o.Id);
 
-            return Json(new { rows, more = result.Count() > page * pageSize });
+            return Json(new AjaxListResult
+                            {
+                                Content = this.RenderView("ListItems/MealItem", list.Page(page, pageSize.Value).ToList()),
+                                More = list.Count() > page * pageSize
+                            });
         }
 
         public ActionResult Selected(IEnumerable<int> selected)
         {
-            return View(@"Awesome\LookupList", r.GetAll().Where(o => selected != null && selected.Contains(o.Id)));
+            var items = (selected != null)
+                            ? repo.GetAll().Where(o => selected.Contains(o.Id)).ToList()
+                            : new List<Meal>();
+
+            return Json(new AjaxListResult
+                         {
+                             Content = this.RenderView("ListItems/MealItem", items)
+                         });
         }
 
-        public ActionResult GetMultiple(IEnumerable<int> selected)
+        public ActionResult GetItems(IEnumerable<int> v)
         {
-            return Json(r.GetAll().Where(o => selected.Contains(o.Id)).Select(v => new
+            return Json(repo.GetAll().Where(o => v.Contains(o.Id)).ToArray().Select(o => new KeyContent
             {
-                Text = @"<img  src='" + Url.Content("~/pictures/Meals/" + Pic(v.Picture)) + "' class='mthumb' />" + v.Name
+                Key = o.Id,
+                Content = @"<img  src='" + Url.Content("~/pictures/Meals/" + Pic(o.Picture)) + "' class='mthumb' />" + o.Name,
+                Encode = false
             }));
         }
 
@@ -45,6 +57,5 @@ namespace Omu.ProDinner.WebUI.Controllers
         {
             return string.IsNullOrEmpty(o) ? "m0.jpg" : "m" + o;
         }
-
     }
 }

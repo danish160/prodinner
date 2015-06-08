@@ -17,10 +17,10 @@ namespace Omu.ProDinner.Service
             hasher.SaltSize = 10;
         }
 
-        public override int Create(User e)
+        public override int Create(User user)
         {
-            e.Password = hasher.Encrypt(e.Password);
-            return base.Create(e);
+            user.Password = hasher.Encrypt(user.Password);
+            return base.Create(user);
         }
 
         public bool IsUnique(string login)

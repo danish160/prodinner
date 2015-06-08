@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+
+using Omu.AwesomeMvc;
 using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Service;
 using Omu.ProDinner.WebUI.Dto;
@@ -9,32 +10,52 @@ using Omu.ProDinner.WebUI.Mappers;
 
 namespace Omu.ProDinner.WebUI.Controllers
 {
-    public class DinnerController: Cruder<Dinner,DinnerInput>
+    public class DinnerController : Cruder<Dinner, DinnerInput>
     {
-        public DinnerController(ICrudService<Dinner> s, IMapper<Dinner, DinnerInput> v) : base(s, v)
+        public DinnerController(ICrudService<Dinner> service, IMapper<Dinner, DinnerInput> mapper)
+            : base(service, mapper)
         {
         }
 
-        public override ActionResult Index()
+        protected override object MapEntityToGridModel(Dinner o)
         {
-            ViewBag.UseList = true;
-            return base.Index();
+            return new
+                {
+                    o.Id, 
+                    o.IsDeleted, 
+                    o.Name,
+                    CountryName = o.Country.Name,
+                    ChefName = o.Chef.FirstName + " " + o.Chef.LastName,
+                    o.Address,
+                    MealsCount = o.Meals.Count
+                };
         }
 
-        public virtual ActionResult Search(string search, int? chefId, IEnumerable<int> meals, int page = 1, int ps = 5)
+        public ActionResult GridGetItems(GridParams g, string parent, bool? restore)
         {
-            var src = s.Where(o => o.Name.Contains(search), User.IsInRole("admin"));
-            if (chefId.HasValue) src = src.Where(o => o.ChefId == chefId.Value);
-            if (meals != null) src = src.Where(o => meals.All(m => o.Meals.Select(g => g.Id).Contains(m)));
+            var isAdmin = User.IsInRole("admin");
 
-            var rows = this.RenderView("rows", src.OrderByDescending(u => u.Id).Skip((page - 1) * ps).Take(ps));
+            var data = service.Where(o => o.Name.Contains(parent), isAdmin);
 
-            return Json(new { rows, more = src.Count() > page * ps });
+            if (restore.HasValue && isAdmin)
+            {
+                service.Restore(Convert.ToInt32(g.Key));
+            }
+
+            var model = new GridModelBuilder<Dinner>(data.AsQueryable(), g)
+                {
+                    Key = "Id",
+                    Map = MapEntityToGridModel,
+                    GetItem = () => service.Get(Convert.ToInt32(g.Key))
+                }.Build();
+
+            return Json(model);
         }
 
-        public ActionResult About()
+        public ActionResult Details(int key)
         {
-            return View();
+            var dinner = service.Get(key);
+            return View(dinner);
         }
     }
 }

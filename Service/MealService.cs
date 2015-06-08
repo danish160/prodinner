@@ -13,17 +13,19 @@ namespace Omu.ProDinner.Service
             this.fileManagerService = fileManagerService;
         }
 
-        public void SetPicture(int id, string filename, int x,int y, int w, int h)
+        public void SetPicture(int id, string root, string filename, int x,int y, int w, int h)
         {
-            fileManagerService.MakeImages(filename, x, y, w, h);
-            var o = repo.Get(id);
-            if (o.Picture == filename) return;
+            fileManagerService.MakeImages(root, filename, x, y, w, h);
             
-            var old = o.Picture;
-            o.Picture = filename;
+            var meal = repo.Get(id);
+
+            if (meal.Picture == filename) return;
+            
+            var oldPictureFileName = meal.Picture;
+            meal.Picture = filename;
             repo.Save();
 
-            if(!string.IsNullOrWhiteSpace(old)) fileManagerService.DeleteImages(old);
+            if(!string.IsNullOrWhiteSpace(oldPictureFileName)) fileManagerService.DeleteImages(root, oldPictureFileName);
         }
     }
 }

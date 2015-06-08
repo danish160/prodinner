@@ -17,10 +17,7 @@ namespace Omu.ProDinner.Infra
 
         public static void RegisterAllFromAssemblies(string a)
         {
-            IoC.Container.Register(AllTypes.FromAssemblyNamed(a).Pick()
-                                  .WithService.DefaultInterface()
-                                  .Configure(c => c.LifeStyle.PerWebRequest));
+            IoC.Container.Register(Classes.FromAssemblyNamed(a).Pick().WithService.DefaultInterfaces().LifestylePerWebRequest());
         }
     }
 }
- 

@@ -1,45 +1,50 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+using Omu.AwesomeMvc;
 using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Repository;
 
 namespace Omu.ProDinner.WebUI.Controllers
 {
-    public class RolesLookupController : LookupController
+    public class RolesMultiLookupController : Controller
     {
-        private readonly IRepo<Role> r;
+        private readonly IRepo<Role> repo;
 
-        public RolesLookupController(IRepo<Role> r)
+        public RolesMultiLookupController(IRepo<Role> repo)
         {
-            this.r = r;
+            this.repo = repo;
         }
 
-        public override ActionResult SearchForm()
+        public ActionResult SearchForm()
         {
             return Content("");
         }
 
         [HttpPost]
-        public ActionResult Search(IEnumerable<int> selected)
+        public ActionResult Search(int[] selected)
         {
-            var res = r.GetAll();
-            if (selected != null) res = res.Where(o => !selected.Contains(o.Id));
-            return View(@"Awesome\LookupList", res);
+            var r = repo.GetAll();
+            if (selected != null) r = r.Where(o => !selected.Contains(o.Id));
+
+            return Json(new AjaxListResult { Items = r.ToArray().Select(o => new KeyContent(o.Id, o.Name)) });
         }
 
-        public ActionResult Selected(IEnumerable<int> selected)
+        public ActionResult Selected(int[] selected)
         {
-            var result = selected != null ? r.GetAll().Where(o => selected.Contains(o.Id)) : null;
-            return View(@"Awesome\LookupList", result);
+            selected = selected ?? new int[] {};
+            var r = repo.GetAll().Where(o => selected.Contains(o.Id)).ToArray();
+
+            return Json(new AjaxListResult { Items = r.Select(o => new KeyContent(o.Id, o.Name)) });
         }
 
-        public ActionResult GetMultiple(IEnumerable<int> selected)
+        public ActionResult GetItems(int[] v)
         {
-            return Json(r.GetAll().Where(o => selected.Contains(o.Id)).Select(o => new { Text = o.Name }));
+            return Json(repo.GetAll()
+                .Where(o => v.Contains(o.Id))
+                .ToArray()
+                .Select(o => new KeyContent(o.Id, o.Name)));
         }
-
-
     }
+
 }

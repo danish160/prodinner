@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,23 +9,23 @@ namespace Omu.ProDinner.Data
 {
     public class DelRepo<T> : IDelRepo<T> where T : DelEntity
     {
-        protected readonly DbContext c;
+        protected readonly DbContext dbContext;
 
-        public DelRepo(IDbContextFactory f)
+        public DelRepo(IDbContextFactory dbContextFactory)
         {
-            c = f.GetContext();
+            dbContext = dbContextFactory.GetContext();
         }
 
-        public IEnumerable<T> Where(Expression<Func<T, bool>> predicate, bool showDeleted = false)
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate, bool showDeleted = false)
         {
-            var res = c.Set<T>().Where(predicate);
+            var res = dbContext.Set<T>().Where(predicate);
             if (!showDeleted) res = res.Where(o => o.IsDeleted == false);
             return res;
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return c.Set<T>().Where(o => o.IsDeleted == false);
+            return dbContext.Set<T>().Where(o => o.IsDeleted == false);
         }
 
         public void Restore(T o)

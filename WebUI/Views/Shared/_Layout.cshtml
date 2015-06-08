@@ -1,78 +1,84 @@
-﻿<!DOCTYPE html>
+﻿@using System.Threading
+<!DOCTYPE html>
 <html>
-<head>
-    <title>
-        @ViewBag.Title
-    </title>
-    <link rel="shortcut icon" href="@Url.Content("~/f.ico")" type="image/x-icon" />
-    <link id="siteThemeLink" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/@Html.Action("CurrentTheme", "ChangeTheme")/jquery-ui.css"
-        rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/Awesome.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.tooltip.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.fileupload-ui.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.Jcrop.css")" rel="stylesheet" type="text/css" />
-    @*--jquery first jquery.ui after--*@
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js" type="text/javascript"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"
-        type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.form.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/Awesome.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/style.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.tooltip.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.fileupload.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.fileupload-ui.js")" type="text/javascript"></script>
-    <script type="text/javascript" src='@Url.Content("~/Scripts/jquery.Jcrop.min.js")' ></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#fun').click(function (e) {
-                e.preventDefault();
-                window.location = 'http://www.linkedin.com/in/omuleanu';
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            @ViewBag.Title - ProDinner ASP.net MVC Awesome Demo Application
+        </title>
+        <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon" />
+        @{
+            var jqtheme = ChangeThemeController.GetJqTheme();
+            var theme = ChangeThemeController.GetTheme();
+         }
+
+        <link href="@Url.Content("~/Content/themes/" + theme + "/Site.css?v=83")" rel="stylesheet" type="text/css" id="demoStyle" />
+        <link href="//code.jquery.com/ui/1.11.1/themes/@(jqtheme)/jquery-ui.min.css" rel="stylesheet" id="jqStyle" />
+        <link href="@Url.Content("~/Content/themes/" + theme + "/AwesomeMvc.css?v=83")" rel="stylesheet" type="text/css" id="aweStyle" />
+        <link href="@Url.Content("~/Content/Common.css")?v=83" rel="stylesheet" type="text/css" />
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+        <script src="@Url.Content("~/Scripts/AwesomeMvc.js")?v=83" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/Site.js")?v=83" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            var root = '@(Url.Content("~"))';
+            var isMobileOrTablet = '@(Utils.IsMobileOrTablet())' == "True";
+            var controller = '@(ViewContext.RouteData.Values["Controller"].ToString().ToLower())';
+            var action = '@(ViewContext.RouteData.Values["Action"].ToString().ToLower())';
+            var dateFormat = '@(AweUtil.ConvertTojQueryDateFormat(Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern))';
+
+            init(dateFormat, isMobileOrTablet);
+            $(function () {
+                documentReady(root, controller, action);
             });
-        });
-    </script>
-</head>
+
+        </script>
+    </head>
 <body>
     <noscript>
         <div id="nos">
             this site works best with javascript allowed
         </div>
     </noscript>
-    @*@Html.Partial("doggy")*@
-    <div id="top-wrapper" class="ui-state-default">
-        <div id="header" class="container">
-            <div id="hlogo">
-                <a href="@Url.Content("~")" id="fun">
-                    <img src='@Url.Content("~\\Content\\strawberry.png")' alt="logo" />
-                </a>
-            </div>
-            <div class="hmenus">
-                <div class="nav">
-                    @Html.Action("Index", "Nav")
-                </div>
-            </div>
-            <div class="trmi">
-                @Html.Partial("login")
-            </div>
-            <div class="trmi">
-                @Html.Action("index", "mui")
-            </div>
-            <div class="trmi">
-                @Html.Action("Index", "ChangeTheme")
-            </div>
-        </div>
-        <div class="cbt">
+    <div id="header">
+        <div class="cont">
+            <ul class="menu">
+                <li><a id='logo' href="@Url.Content("~")"><i></i></a></li>
+                <li class="optional">@Html.ActionLink(Mui.Home, "Index", "Home")</li>
+                <li>@Html.ActionLink(Mui.Meals, "Index", "Meal")</li>
+                @if (User.IsInRole("admin"))
+                {
+                    <li>@Html.ActionLink("Users", "Index", "User")</li>
+                }
+                <li>@Html.ActionLink(Mui.Stuff, "Index", "Stuff")</li>
+                <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
+                <li>@Html.Awe().PopupActionLink().LinkText(Mui.About).Url(Url.Action("About","Home")).Fullscreen(true).Modal(true)</li>
+            </ul>
+            <ul class="menu" style="float:right;">
+                <li> @Html.Partial("login")</li>
+            </ul>
         </div>
     </div>
-    <div id="main-container">
-        <div id="main" class="maindiv ">
-            @RenderBody()
+    <div id="main" class="cont">
+        <div class="settings cbt">
+            <label for="chTheme">Theme:@Html.Action("Index", "ChangeTheme")</label>
+            <label for="chLang">Lang:@Html.Action("index", "mui")</label>
+            <label><button type="button" id="chDog" class="awe-btn">hide dog</button></label>
         </div>
+        @RenderBody()
     </div>
-    <div id="footer" class="ui-state-default">
-        <div class="maindiv">
+    <div id="footer">
+        <div class="cont">
             <span><a href='http://prodinner.codeplex.com'>project home: http://prodinner.codeplex.com</a></span>
         </div>
     </div>
+@Html.Partial("doggy")
 </body>
 </html>

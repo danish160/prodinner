@@ -3,18 +3,11 @@ using Castle.Windsor;
 
 namespace Omu.ProDinner.Infra
 {
-    public sealed class IoC
+    public static class IoC
     {
         private static readonly object LockObj = new object();
 
-        private static IWindsorContainer container;
-
-        private static IoC instance = new IoC();
-
-        private IoC()
-        {
-            container = new WindsorContainer();
-        }
+        private static IWindsorContainer container = new WindsorContainer();
 
         public static IWindsorContainer Container
         {
@@ -26,26 +19,6 @@ namespace Omu.ProDinner.Infra
                 {
                     container = value;
                 }
-            }
-        }
-
-
-        public static IoC Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (LockObj)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new IoC();
-                        }
-                    }
-                }
-
-                return instance;
             }
         }
 

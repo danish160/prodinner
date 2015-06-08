@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Country>
+@foreach (var o in Model)
+{
+    <li data-k="@(o.Id)" class="awe-li" data-val="@(o.Id)"> @* data-val required by the lookup, used to select item *@
+    <div class="fl">@o.Name</div>
+        <div class="fr">
+            <div class="act">
+                <button class="awe-btn" onclick="awe.open('editLookupCountry', { params: { id: @(o.Id) }})">
+                    <span class="ico-edit"></span>
+                </button>
+                &nbsp;
+            @Html.Partial("deletebtn", new DelBtn { Id = o.Id, IsDeleted = o.IsDeleted, Name = "LookupCountry" })
+            </div>
+        </div>
+    </li>
+}

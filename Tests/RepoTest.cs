@@ -7,44 +7,44 @@ namespace Omu.ProDinner.Tests
     public class RepoTest : IntegrationTestsBase
     {
         [Test]
-        public static void TestInsert()
+        public void TestInsert()
         {
-            var r = new Repo<Country>(new DbContextFactory());
-            var c = new Country {Name = "Asaaa"};
-            r.Insert(c);
-            r.Save();
-            var o = r.Get(c.Id);
-            Assert.AreEqual(c.Name, o.Name);
+            var repo = new Repo<Country>(new DbContextFactory());
+            var country = new Country { Name = "testCountry" };
+            country = repo.Insert(country);
+            repo.Save();
+            var country1 = repo.Get(country.Id);
+            Assert.AreEqual(country.Name, country1.Name);
         }
 
         [Test]
         public static void TestRemove()
         {
-            var r = new Repo<Country>(new DbContextFactory());
-            var c = new Country {Name = "a"};
-            r.Insert(c);
-            r.Save();
+            var repo = new Repo<Country>(new DbContextFactory());
+            var country = new Country { Name = "testCountry" };
+            country = repo.Insert(country);
+            repo.Save();
 
-            r.Delete(c);
-            r.Save();
+            repo.Delete(country);
+            repo.Save();
 
-            var o = r.Get(c.Id);
-            Assert.IsTrue(o.IsDeleted);
+            var country1 = repo.Get(country.Id);
+            Assert.IsTrue(country1.IsDeleted);
         }
 
         [Test]
         public static void TestUpdate()
         {
-            var r = new Repo<Country>(new DbContextFactory());
-            var c = new Country {Name = "Asaaa"};
-            r.Insert(c);
-            r.Save();
+            var repo = new Repo<Country>(new DbContextFactory());
+            var country = new Country { Name = "testCountry" };
+            country = repo.Insert(country);
+            repo.Save();
 
-            c.Name = "Lulu";
-            r.Save();
+            country.Name = "changedName";
+            repo.Save();
 
-            var o = r.Get(c.Id);
-            Assert.AreEqual(c.Name, o.Name);
+            var country1 = repo.Get(country.Id);
+            Assert.AreEqual(country.Name, country1.Name);
         }
     }
 }

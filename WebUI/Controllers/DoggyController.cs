@@ -20,7 +20,7 @@ namespace Omu.ProDinner.WebUI.Controllers
                                                        new Message{Key = "dinnerindex", Value = "you can search for dinners from the 'Search for a dinner' box"},
                                                        new Message{Key = "dinnerindex", Value = "to get more results click on the 'more' button on the bottom"},
                                                        new Message{Key = "dinnerindex", Value = "you can delete any dinner by clicking on the 'X' button"},
-                                                       new Message{Key = "dinnerindex", Value = "you can select multiple meals with the <b>+</b> button or with drag and drop"},
+                                                       new Message{Key = "dinnerindex", Value = "you can select multiple meals by using up/down buttons or with drag and drop"},
                                                        new Message{Key = "mealindex", Value = "you can see more meals if you click on the 'more' button on the bottom"},
                                                        new Message{Key = "mealindex", Value = "you can delete any meal by clicking on the 'X' button"},
                                                    };
@@ -33,6 +33,7 @@ namespace Omu.ProDinner.WebUI.Controllers
             "click on this box to show more hints",
             "click on me to <b>hide/show</b> this box",
             "hovering the red validation bulbs will show the messages",
+            "click on the message to show more tips; click on me to hide"
         };
             
         public ActionResult Tell(string c, string a)

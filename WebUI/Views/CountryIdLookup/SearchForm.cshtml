@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+@(Html.Awe().InitPopupForm()
+            .Name("createLookupCountry")
+            .Url(Url.Action("Create","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("itemCreatedAl(0,'CountryId')")
+            .Height(200))
+
+@(Html.Awe().InitPopupForm()
+            .Name("editLookupCountry")
+            .Url(Url.Action("Edit","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("itemUpdatedAl(0,0,'CountryId')")
+            .Height(200))
+
+@(Html.Awe().InitPopupForm()
+            .Name("deleteLookupCountry")
+            .Url(Url.Action("Delete","Country"))
+            .Parameter("usingAjaxList", true)
+            .Success("itemDeletedAl(0, 'CountryId')")
+            .Height(200))
+
+<div class="elabel2" >Search:</div><div class="einput"><input type="text" name="search" class="awe-searchtxt"/></div>
+<button type="submit" class="awe-btn">Search</button>
+<div style="display:inline;"> 
+    <button type="button" class="awe-btn" onclick="awe.open('createLookupCountry')">Create</button>
+</div>
+@Html.Awe().Form().FormClass("restoreLookupCountry").Success("itemUpdatedAl('Meals', 0, 'CountryId')").Url(Url.Action("Restore", "Country"))
+<br style="clear:both;"/>

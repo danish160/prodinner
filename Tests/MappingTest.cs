@@ -10,12 +10,12 @@ namespace Omu.ProDinner.Tests
 {
     public class MappingTest : IntegrationTestsBase
     {
-        private UniRepo u;
+        private UniRepo urepo;
 
         [SetUp]
         public void Start()
         {
-            u = new UniRepo(new DbContextFactory());
+            urepo = new UniRepo(new DbContextFactory());
         }
 
         [Test]
@@ -34,9 +34,9 @@ namespace Omu.ProDinner.Tests
             foreach (var type in types)
             {
                 Console.WriteLine("testing " + type.Name);
-                dynamic o = Activator.CreateInstance(type).InjectFrom(new Fill(u));
-                u.Insert(o);
-                u.Save();
+                dynamic o = Activator.CreateInstance(type).InjectFrom(new Fill(urepo));
+                o = urepo.Insert(o);
+                urepo.Save();
                 Assert.IsTrue(o.Id != 0);
                 Console.WriteLine(type.Name + " ok");
                 Console.WriteLine();
@@ -46,15 +46,15 @@ namespace Omu.ProDinner.Tests
 
     public class Fill : NoSourceValueInjection
     {
-        private readonly IUniRepo u;
+        private readonly IUniRepo urepo;
 
         private static long s;
         private static int i;
         private readonly bool isChild;
 
-        public Fill(IUniRepo u, bool isChild = false)
+        public Fill(IUniRepo urepo, bool isChild = false)
         {
-            this.u = u;
+            this.urepo = urepo;
             this.isChild = isChild;
         }
 
@@ -70,9 +70,9 @@ namespace Omu.ProDinner.Tests
                 else if (p.PropertyType.IsSubclassOf(typeof(Entity)))
                 {
                     Console.WriteLine("   create a " + p.PropertyType.Name);
-                    dynamic o = Activator.CreateInstance(p.PropertyType).InjectFrom(new Fill(u, true));
-                    u.Insert(o);
-                    u.Save();
+                    dynamic o = Activator.CreateInstance(p.PropertyType).InjectFrom(new Fill(urepo, true));
+                    o = urepo.Insert(o);
+                    urepo.Save();
                     p.SetValue(target, o);
                 }
                 else if (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) && !isChild)
@@ -86,9 +86,9 @@ namespace Omu.ProDinner.Tests
                     for (var k = 0; k < 3; k++)
                     {
                         Console.WriteLine("      create a " + t.Name);
-                        dynamic o = Activator.CreateInstance(t).InjectFrom(new Fill(u, true));
-                        u.Insert(o);
-                        u.Save();
+                        dynamic o = Activator.CreateInstance(t).InjectFrom(new Fill(urepo, true));
+                        o = urepo.Insert(o);
+                        urepo.Save();
                         Console.WriteLine("      add " + t.Name  + " to list");
                         list.Add(o);
                     }

@@ -10,11 +10,11 @@ namespace Omu.ProDinner.WebUI.Controllers
     /// </summary>
     /// <typeparam name="TEntity">the entity</typeparam>
     /// <typeparam name="TInput"> viewmodel </typeparam>
-    public class Cruder<TEntity, TInput> : Crudere<TEntity,TInput,TInput>
+    public abstract class Cruder<TEntity, TInput> : Crudere<TEntity,TInput,TInput>
         where TInput : Input, new()
         where TEntity : DelEntity, new()
     {
-        public Cruder(ICrudService<TEntity> s, IMapper<TEntity, TInput> v) : base(s, v, v)
+        public Cruder(ICrudService<TEntity> service, IMapper<TEntity, TInput> mapper) : base(service, mapper, mapper)
         {
         }
         

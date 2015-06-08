@@ -1,0 +1,28 @@
+﻿@model DinnerInput
+<div class="bro">
+    @using (Html.BeginForm())
+    {    
+        <div class="inputarea">
+            @Html.EditorFor(o => o.Name)
+            @Html.EditorFor(o => o.CountryId)
+            @Html.EditorFor(o => o.ChefId)
+            @Html.EditorFor(o => o.Address)
+            @Html.EditorFor(o => o.Start)
+            <div class="efield">
+                <div class="elabel">
+                    @Mui.Time (hh/mm) *:
+                </div>
+                <div class='einput'>
+                    @Html.Awe().TextBoxFor(o => o.Hour).Numeric(true).HtmlAttributes(new { @class = "stext" })
+                    @Html.ValidationMessageFor(o => o.Hour)
+                    @Html.Awe().TextBoxFor(o => o.Minute).Numeric(true).CssClass("stext")
+                    @Html.ValidationMessageFor(o => o.Minute)
+                </div>                
+            </div>
+            @Html.EditorFor(o => o.Duration)
+        </div>
+        <div class="inputarea">
+            @Html.EditorFor(o => o.Meals)
+        </div>
+    }
+</div>

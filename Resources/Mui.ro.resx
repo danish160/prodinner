@@ -193,7 +193,7 @@
     <value>Sunteți sigur că doriți să ștergeți acest item ?</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Crează</value>
+    <value>Creează</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Șterge</value>
@@ -229,6 +229,6 @@
     <value>{0} nu trebuie sa fie mai lung de {1} caractere</value>
   </data>
   <data name="Duration" xml:space="preserve">
-    <value>Duata (minute)</value>
+    <value>Durata (minute)</value>
   </data>
 </root>

@@ -1,0 +1,558 @@
+﻿html, body, button, div, span, iframe, h1, h2, h3, h4, h5, h6, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, ul, li, img
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+}
+
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+*, *:before, *:after {
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+img {
+vertical-align: middle;
+}
+
+#logo {
+    display: inline-block;
+    padding: 0;
+    margin-right: 10px;
+}
+
+#logo i {
+    background: url(logo.gif);
+    width: 51px;
+    height: 43px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+a, .awe-popup a {
+    text-decoration: none;
+    color: #05A;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body
+{
+    font-family: Verdana, Arial,Liberation Sans,DejaVu Sans,sans-serif;
+    text-align: left;
+    overflow-y: scroll;
+    font-size: 13px;
+    line-height: 1.428571429;
+    color: #333;
+}
+
+input, select
+{
+    padding: 3px;
+}
+
+input[type="text"], input[type="password"], select
+{
+    width: 185px;
+    border: 1px solid #aaa !important;
+    font-size: 13px;
+    border-radius: 2px;
+}
+
+textarea {
+    border: 1px solid #aaa !important;
+    height: 100px;
+}
+
+fieldset
+{
+    border-radius: 3px;
+    border: 1px solid gainsboro;
+    padding: 10px;
+}
+
+.ico-edit, .ico-del, .ico-restore
+{
+    display: block;
+    overflow: hidden;
+    height: 18px;
+    width: 18px;
+    background-repeat: no-repeat;
+}
+
+.ico-edit
+{
+    background-position: 0px -1px;
+}
+
+.ico-del
+{
+    background-position: -17px -1px;
+}
+
+.ico-restore 
+{
+    background-position: -33px 0;
+}
+
+.detailbtn
+{
+    vertical-align: middle;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    margin-left: -5px;
+    padding-left: 5px;
+}
+
+.detailbtn * 
+{
+    vertical-align: middle;
+}
+
+.detailbtn.awe-on i
+{
+    background-position: -48px -16px;
+}
+
+.field-validation-error span
+{
+    position: absolute;
+    background-image: url("error.png");
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+    display: inline-block;
+    font-size: 0;
+    min-height: 23px;
+    min-width: 25px;
+    margin-left: 3px;
+    vertical-align: bottom;
+}
+
+.field-validation-error:hover span
+{
+    position: absolute;
+    font-size: 13px;
+    background-color: white;
+    padding: 3px 3px 3px 30px;
+    border: solid gainsboro 1px;
+    border-radius: 3px;
+}
+
+.efield
+{
+    clear: both;
+    width: 100%;
+    padding: 1.2em 0 0 0;
+}
+.elabel
+{
+    text-align: right;
+    width: 170px;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    vertical-align: top;
+    margin-top: 1px;
+    padding-right: 3px;
+}
+
+@media (max-width: 580px) {
+.elabel {
+    text-align: left;
+    display: block;
+    }
+}
+
+.einput
+{
+    border: 0 none;
+    display: inline-block;
+    min-width: 179px;
+}
+
+.einput input, .einput select
+{
+    float: left;
+}
+
+input.stext {
+    width: 30px;
+}
+.stext:first-child 
+{
+    margin-right: 10px;
+}
+.bar {
+    padding: 5px 0;
+}
+
+#main
+{
+    overflow: hidden;
+    padding-bottom: 2em;
+}
+
+#footer
+{
+    height: 75px;
+}
+
+.cbt
+{
+    clear: both;
+}
+
+.settings {
+    float: right;
+    padding-top: 5px;
+}
+.settings select {
+    width: auto;
+    padding: 0;
+    margin: 2px;
+}
+
+.settings .awe-btn {
+    padding: 0 2px;
+}
+
+.cont 
+{
+    padding-right:2px;
+    padding-left: 2px;
+}
+
+@media (min-width: 1000px) {
+    .cont {
+        padding: 0 3.5%;
+    }
+}
+
+#nos
+{
+    background: #ff5544;
+    text-align: center;
+    padding: 0.3em;
+    color: White;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.fl
+{
+    float: left;
+}
+
+.fr
+{
+    float: right;
+}
+
+h1, h2, h3, h4, h5 {
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+font-weight: 500;
+line-height: 1.1;
+color: inherit;
+}
+
+h2
+{
+    margin: 20px 5px;
+    font-weight: bold;
+}
+
+h3
+{
+    font-size: 3em;
+}
+
+p
+{
+    margin: 5px 0;
+    padding: 2px 0;
+}
+
+.explain p
+{
+    margin: 0;
+}
+
+.awe-ajaxlist
+{
+    margin-top: 5px;
+}
+
+.mealmove
+{
+    margin: 1px 0 3px;
+}
+
+.thumb
+{
+    width: 200px;
+    height: 150px;
+    background: White;
+    border-radius: 3px;
+    display: block;
+}
+
+.sthumb
+{
+    width: 100px;
+    height: 75px;
+    margin-right: 3px;
+    border-radius: 3px;
+}
+
+.mthumb
+{
+    width: 45px;
+    height: 34px;
+    vertical-align: middle;
+}
+
+li.awe-li.dinner
+{
+    display: block;
+    border: gainsboro solid 1px;
+    padding: 7px;
+    border-radius: 2px;
+    background-color: white !important;
+    margin: 5px 0 0 0;
+}
+
+.feedback ul li{
+    margin-left: 3em;
+    list-style-type: disc;
+}
+
+.si
+{
+    display: inline-block;
+    margin-right: 1em;
+    line-height: 16px;
+    vertical-align: top;
+}
+
+.mealslist, .flist
+{
+    border: none !important;
+}
+
+.awe-ajaxlist li.awe-li.mealitem
+{
+    margin: 3px 2px;
+    padding: 4px;
+    border: solid gainsboro 1px;
+    font-size: 13px;
+    border-radius: 2px;
+}
+
+.mealitem .awe-movebtn
+{
+    height: 22px;
+    width: 24px;
+}
+
+.meal
+{
+    width: 450px;
+    height: 230px;
+    border: 1px solid gainsboro;
+    margin: 4.5px !important;
+    padding: 15px !important;
+    border-radius: 3px;
+    background-color: white !important;
+}
+
+.comments
+{
+    float: right;
+    width: 200px;
+    max-height: 130px;
+    overflow: auto;
+    margin-top: 5px;
+    word-break: break-all;
+}
+
+.inputarea
+{
+    display: inline-block;
+    width: 400px;
+    vertical-align: top;
+}
+
+@media (max-width: 480px)
+{
+    .inputarea {
+        width: auto;
+    }
+}
+
+.bro
+{
+    background-image: url('bro.gif');
+    background-repeat: no-repeat;
+    background-position: right top;
+    height: 100%;
+}
+
+#doggy
+{
+    width: 100px;
+    height: 100px;
+    background-image: url('dogs.gif');
+    z-index: 9000;
+    position: fixed;
+    right: 30px;
+    bottom: 50px;
+}
+
+#doggy:hover
+{
+    background-image: url('dog.gif');
+}
+
+#tip
+{
+    width: 130px;
+    height: 133px;
+    opacity: 0.90;
+    background-image: url('tip.png');
+    z-index: 9000;
+    position: fixed;
+    right: 110px;
+    bottom: 120px;
+    display: none;
+}
+
+#tipcontent
+{
+    padding: 1.3em;
+    font-size: 95%;
+}
+
+.cropbox
+{
+    width: 533px;
+    height: 400px;
+    float: left;
+    background: white;
+}
+
+.thumbhead
+{
+    float: left;
+    margin-bottom: 3px;
+    text-align: center;
+    width: 200px;
+}
+
+.menu
+{
+    display: inline-block;
+    font-size: 0;
+}
+
+.menu li
+{
+    display: inline-block;
+    font-size: 15px;
+    vertical-align: middle;
+    font-family: Verdana, Tahoma, Arial;
+    line-height: 45px;
+}
+
+.menu a {
+    padding: 10px 5px;
+    text-decoration: none;
+    color: #000789;
+    font-family: verdana;
+    vertical-align: middle;
+}
+
+@media (max-width: 530px)
+{
+    .menu a {
+        padding: 5px 2px;
+    }
+
+    .menu li {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 700px) {
+    .optional {
+        display: none !important;
+    }
+}
+
+.menu a:hover {
+    color: #3772d2;
+}
+
+#header {
+    border-bottom: 1px solid lightgray;
+}
+
+#footer {
+    border-top: 1px solid #E0EFE0;
+    padding: 10px;
+}
+
+#header, #footer
+{
+    color: #555;
+    background-color: #FAFAFA;
+    background: linear-gradient(to bottom,#FFF,#F0F0F0);
+}
+
+.awe-list .awe-li
+{
+    overflow: hidden;
+}
+
+ul.awe-ajaxlist
+{
+    width: auto;
+}
+
+.flist li.awe-li.awe-morecont {
+    padding: 0;
+}
+
+.flist .awe-morebtn {
+    margin: 0;
+    margin-top: 5px;
+}
+
+fieldset
+{
+    border: 1px solid #ddd;
+    padding: 3px 5px;
+    margin: 3px 0 3px 3px;
+    border-radius: 2px;
+}
+
+legend
+{
+    font-size: 13px;
+    color: #555;
+    font-weight: bold;
+    width: auto;
+}
+
+@-ms-viewport {
+     width: auto !important; 
+}

@@ -1,4 +1,6 @@
-﻿using FakeItEasy;
+﻿using System;
+
+using FakeItEasy;
 using NUnit.Framework;
 using Omu.ProDinner.Core;
 using Omu.ProDinner.Core.Model;
@@ -26,9 +28,12 @@ namespace Omu.ProDinner.Tests
         }
 
         [Test]
-        public void IndexShouldReturnViewCruds()
+        public void Testcs()
         {
-            c.Index().ShouldBeViewResult().ViewName.ShouldEqual("cruds");
+            var s = "123.1231231239872371973832";
+            var d = Convert.ToDouble(s);
+            var i = (int)d;
+            Assert.AreEqual(123, i);
         }
 
         [Test]
@@ -42,13 +47,7 @@ namespace Omu.ProDinner.Tests
         public void CreateShouldReturnViewForInvalidModelstate()
         {
             c.ModelState.AddModelError("", "");
-            c.Create(A.Fake<CountryInput>()).ShouldBeViewResult();
-        }
-
-        [Test]
-        public void CreateShouldReturnJson()
-        {
-            c.Create(A.Fake<CountryInput>()).ShouldBeJson();
+            c.Create(A.Fake<CountryInput>(), null).ShouldBeViewResult();
         }
 
         [Test]
@@ -60,41 +59,23 @@ namespace Omu.ProDinner.Tests
         }
 
         [Test]
-        public void EditShouldThrowException()
-        {
-            A.CallTo(() => s.Get(1)).Returns(null);
-            Assert.Throws<ProDinnerException>(() => c.Edit(1));
-            A.CallTo(() => v.MapToInput(A<Country>.Ignored)).MustNotHaveHappened();
-        }
-
-        [Test]
-        public void EditShouldReturnJson()
-        {
-            c.Edit(A.Fake<CountryInput>()).ShouldBeJson();
-            A.CallTo(() => v.MapToEntity(A<CountryInput>.Ignored, A<Country>.Ignored)).MustHaveHappened();
-            A.CallTo(() => s.Get(A<int>.Ignored)).MustHaveHappened();
-            A.CallTo(() => s.Save()).MustHaveHappened();
-        }
-
-        [Test]
         public void EditShouldReturnViewForInvalidModelstate()
         {
             c.ModelState.AddModelError("", "");
-            c.Edit(A.Fake<CountryInput>()).ShouldBeViewResult().ShouldBeCreate();
+            c.Edit(A.Fake<CountryInput>(), null).ShouldBeViewResult().ShouldBeCreate();
         }
 
         [Test]
         public void EditShouldReturnContentOnError()
         {
             A.CallTo(() => v.MapToEntity(A<CountryInput>.Ignored, A<Country>.Ignored)).Throws(new ProDinnerException("aa"));
-            c.Edit(A.Fake<CountryInput>()).ShouldBeContent().Content.ShouldEqual("aa");
+            c.Edit(A.Fake<CountryInput>(), null).ShouldBeContent().Content.ShouldEqual("aa");
         }
 
         [Test]
-        public void DeleteShouldRedirectToIndex()
+        public void DeleteShouldReturnView()
         {
-            c.Delete(1).ShouldBeJson();
-            A.CallTo(() => s.Delete(1)).MustHaveHappened();
+            c.Delete(1, "").ShouldBeViewResult();
         }
     }
 }

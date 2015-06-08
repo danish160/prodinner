@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Prodinner, where pros eat";
+}
+<h2>
+    Pr0Dinn3r, wh3r3 pr0s e4t
+</h2>
+<fieldset>
+    <legend>@Mui.search_for_a_dinner</legend>
+    <div class="si">
+        <div>@Mui.Name:</div>
+        @(Html.Awe().Autocomplete("DinnerName")
+                .Controller<DinnerAutocompleteController>()
+                .CssClass("searchtxt")
+                .GeneratePropId(false)
+                .Parent("searchChefId", "chef")
+                .Parent("searchMeals", "meals"))
+    </div>
+    <div class="si">
+        <div>@Mui.Chef:</div>
+        @Html.Awe().AjaxDropdown("ChefId").Prefix("search")
+    </div>
+    <div class="si">
+        <div>@Mui.Meals:</div>
+        <span class="cbt" />
+        @(Html.Awe().MultiLookup("Meals")
+                .Prefix("search")
+                .PopupClass("mealsLookup")
+                .Fullscreen(true)
+                .ClearButton(true)
+                .DragAndDrop(true)
+                .ParameterFunc("getMealsLookupPageSize"))</div>
+    <div class="si">
+        <br />
+        <button type="button" class="awe-btn" id="btnSearch" style="margin-top: 4px;">@Mui.Search</button>
+    </div>
+</fieldset>
+<br />
+
+@(Html.Awe().InitPopupForm()
+            .Name("createDinner")
+            .Url(Url.Action("create"))
+            .Success("itemCreatedAl('Dinners')")
+            .Parameter("usingAjaxList", true)
+            .Fullscreen(true)
+            .Modal(true))
+
+@(Html.Awe().InitPopupForm()
+            .Name("editDinner")
+            .Url(Url.Action("Edit"))
+            .Success("itemUpdatedAl('Dinners')")
+            .Parameter("usingAjaxList", true)
+            .Fullscreen(true)
+            .Modal(true))
+
+@(Html.Awe().InitPopupForm()
+            .Name("deleteDinner")
+            .Url(Url.Action("Delete"))
+            .Success("itemDeletedAl('Dinners')")
+            .Height(200)
+            .Modal(true))
+
+@Html.Awe().Form().FormClass("restoreDinner").Success("itemUpdatedAl('Dinners')").Url(Url.Action("Restore"))
+
+<button type="button" class="awe-btn" onclick="awe.open('createDinner')">@Mui.host_a_dinner</button>
+
+@(Html.Awe().AjaxList("Dinners")
+        .CssClass("flist")
+        .Parent("DinnerName", "search")
+        .Parent("searchChefId", "chef")
+        .Parent("searchMeals", "meals"))
+      
+<script type="text/javascript">
+    $(function () {
+        $('#btnSearch').click(function () { $('#Dinners').data('api').load(); });
+    });
+</script>

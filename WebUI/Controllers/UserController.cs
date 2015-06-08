@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+
+using Omu.AwesomeMvc;
 using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Service;
 using Omu.ProDinner.WebUI.Dto;
@@ -11,19 +13,44 @@ namespace Omu.ProDinner.WebUI.Controllers
     [Authorize(Roles = "admin")]
     public class UserController : Crudere<User, UserCreateInput, UserEditInput>
     {
-        private new readonly IUserService s;
+        private new readonly IUserService service;
 
-        public UserController(IMapper<User, UserCreateInput> v, IMapper<User, UserEditInput> ve, IUserService s) : base(s, v, ve)
+        public UserController(IMapper<User, UserCreateInput> v, IMapper<User, UserEditInput> ve, IUserService service)
+            : base(service, v, ve)
         {
-            this.s = s;
+            this.service = service;
         }
 
-        public virtual ActionResult Search(string search, int page = 1, int ps = 5)
+        protected override object MapEntityToGridModel(User user)
         {
-            var src = s.Where(o => o.Login.StartsWith(search), User.IsInRole("admin"));
-            var rows = this.RenderView("rows", src.OrderByDescending(u => u.Id).Skip((page - 1) * ps).Take(ps));
+            return new
+                    {
+                        user.Id,
+                        user.IsDeleted,
+                        user.Login,
+                        Roles = string.Join(", ", user.Roles.Select(o => o.Name))
+                    };
+        }
 
-            return Json(new { rows, more = src.Count() > page * ps });
+        public ActionResult GridGetItems(GridParams g, string parent, bool? restore)
+        {
+            var isAdmin = User.IsInRole("admin");
+
+            var data = service.Where(o => o.Login.StartsWith(parent), isAdmin);
+
+            if (restore.HasValue && isAdmin)
+            {
+                service.Restore(Convert.ToInt32(g.Key));
+            }
+
+            var model = new GridModelBuilder<User>(data.AsQueryable(), g)
+            {
+                Key = "Id",
+                Map = MapEntityToGridModel,
+                GetItem = () => service.Get(Convert.ToInt32(g.Key))
+            }.Build();
+
+            return Json(model);
         }
 
         public ActionResult ChangePassword(int id)
@@ -35,8 +62,8 @@ namespace Omu.ProDinner.WebUI.Controllers
         public ActionResult ChangePassword(ChangePasswordInput input)
         {
             if (!ModelState.IsValid) return View(input);
-            s.ChangePassword(input.Id, input.Password);
-            return Content("ok");
+            service.ChangePassword(input.Id, input.Password);
+            return Json(new { Login = service.Get(input.Id).Login });
         }
     }
 }

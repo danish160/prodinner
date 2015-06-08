@@ -1,0 +1,10 @@
+﻿@model FeedbackInput
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(o => o.Id)
+<text> add your constructive feedback here:</text> @Html.ValidationMessageFor(o => o.Comments)
+<br/>
+<br/>
+    @Html.EditorFor(o => o.Comments)
+}
+a and script tags will be removed, you can edit your last feedback in this session

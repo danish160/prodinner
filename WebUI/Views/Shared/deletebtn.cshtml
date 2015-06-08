@@ -1,13 +1,14 @@
-﻿@model dynamic
+﻿@model DelBtn
 @if (Model.IsDeleted)
 {
-    <form class="frestore" method="post" action="@Url.Action("Restore", new { Model.Id })">
-    <input type="submit" value="restore" />
+    <form class="restore@(Model.Name) awe-il" method="post">
+        @Html.HiddenFor(o => o.Id)
+        <button type="submit" class="awe-btn" ><span class="ico-restore"></span></button>
     </form>
 }
 else
 {
-    <form class="fconfirm" method="post" action="@Url.Action("Delete", new { Model.Id })">
-    <input type="submit" value=" x " class="confirm" />
-    </form>
+    <button type="button" class="awe-btn" onclick="awe.open('delete@(Model.Name)', { params: { id: @(Model.Id) } })">
+        <span class="ico-del"></span>
+    </button>
 }

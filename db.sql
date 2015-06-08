@@ -20,6 +20,10 @@ go
 use prodinner
 go
 
+create table feedbacks(
+id int identity primary key,
+comments nvarchar(max))
+
 create table countries(
 id int identity primary key,
 name nvarchar(20) not null,
@@ -137,7 +141,7 @@ insert meals(name,comments,picture) values('beef steak', 'beef','7.jpg')
 insert meals(name,comments,picture) values('chiken soup', 'soup with chicken ','8.jpg')
 insert meals(name,comments,picture) values('big broccoli', 'broccoli','9.jpg')
 insert meals(name,comments,picture) values('tomatoes', 'red tomatoes','10.jpg')
-insert meals(name,comments,picture) values('toamtoes & cucumber salad', 'very nice salad','11.jpg')
+insert meals(name,comments,picture) values('salad', 'very nice salad','11.jpg')
 insert meals(name,comments,picture) values('tree', 'looks like a huge broccoli','12.jpg')
 insert meals(name,comments,picture) values('melon', 'yellow melon','13.jpg')
 insert meals(name,comments,picture) values('watermelon', 'green, red on the inside','14.jpg')

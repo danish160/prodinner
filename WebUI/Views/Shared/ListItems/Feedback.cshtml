@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Feedback>
+@{
+    var id = 0;
+    if(Session["lastFeedback"] != null)
+    {
+        id = (int)Session["lastFeedback"];
+    }
+}
+
+@foreach (var o in Model)
+{
+    <li class="awe-li feedback" data-val="@o.Id">
+        <div>
+            @Html.Raw(o.Comments)
+        </div>
+        <div class="fr">
+            @{ if(id == o.Id)
+               {
+        <button class="awe-btn" onclick="@(Url.Awe().PopupFormAction()
+        .Url(Url.Action("Edit", "Feedback", new { o.Id }))
+        .Success("reload").Height(500).Width(900))">
+                Edit</button> 
+               }
+            }
+        </div>
+    </li>
+} 

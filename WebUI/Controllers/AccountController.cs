@@ -20,7 +20,7 @@ namespace Omu.ProDinner.WebUI.Controllers
 
         public ActionResult SignIn()
         {
-            return View();
+            return View(new SignInInput{Login = "o", Password = "1"});
         }
 
         [HttpPost]
@@ -46,7 +46,7 @@ namespace Omu.ProDinner.WebUI.Controllers
 
             formsAuth.SignIn(user.Login, input.Remember, user.Roles.Select(o => o.Name));
 
-            return RedirectToAction("index", "dinner");
+            return RedirectToAction("index", "home");
         }
 
         public ActionResult SignOff()

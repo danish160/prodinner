@@ -2,22 +2,22 @@
 
 namespace Omu.ProDinner.Data
 {
+    public interface IDbContextFactory
+    {
+        DbContext GetContext();
+    }
+
     public class DbContextFactory : IDbContextFactory
     {
-        private readonly DbContext c;
+        private readonly DbContext dbContext;
         public DbContextFactory()
         {
-            c = new Db();
+            dbContext = new Db();
         }
 
         public DbContext GetContext()
         {
-            return c;
+            return dbContext;
         }
-    }
-
-    public interface IDbContextFactory
-    {
-        DbContext GetContext();
     }
 }

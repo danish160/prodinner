@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Repository;
+using Omu.ValueInjecter;
 
 namespace Omu.ProDinner.Data
 {
@@ -14,9 +15,12 @@ namespace Omu.ProDinner.Data
             c = a.GetContext();
         }
 
-        public void Insert<T>(T o) where T : Entity
+        public T Insert<T>(T o) where T : Entity, new()
         {
-            c.Set<T>().Add(o);
+            var t = new T();
+            t.InjectFrom(o);
+            c.Set<T>().Add(t);
+            return t;
         }
 
         public void Save()

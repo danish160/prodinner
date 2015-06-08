@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -33,7 +35,10 @@ namespace Omu.ProDinner.WebUI
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             var c = Request.Cookies["lang"];
-            var l = c == null ? "auto:en-US" : c.Value;
+            if (c == null || c.Value == "auto") return;
+
+            var l = c.Value;
+
             // Uses WebForms code to apply "auto" culture to current thread and deal with
             // invalid culture requests automatically. Defaults to en-US when not specified.
             using (var fakePage = new Page())
@@ -41,6 +46,8 @@ namespace Omu.ProDinner.WebUI
                 var ignored = fakePage.Server; // Work around a WebForms quirk
                 fakePage.Culture = l; // Apply local formatting to this thread
                 fakePage.UICulture = l; // Apply local language to this thread
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(l);
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(l);
                 HttpContext.Current.Items.Add("lang", l);
             }
         }

@@ -2,8 +2,14 @@
 <script runat="server">
     protected override void OnInit(EventArgs e) {
         base.OnInit(e);
- 
-        if (ViewData.ModelMetadata.HideSurroundingHtml) {
+        var dontSurround = false;
+        
+        if(ViewData.ModelMetadata.AdditionalValues.ContainsKey("DontSurround"))
+        {
+            dontSurround = (bool)ViewData.ModelMetadata.AdditionalValues["DontSurround"];
+        }
+        
+        if (ViewData.ModelMetadata.HideSurroundingHtml || dontSurround) {
             TablePlaceholder.Visible = false;
         }
         else {
@@ -17,7 +23,6 @@
     <div class="efield">
         <div class="elabel">
             <asp:ContentPlaceHolder runat="server" id="Label">
-               
                 <%= ViewData.ModelMetadata.GetDisplayName() %>
                  <%= ViewData.ModelMetadata.IsRequired ? "*" : "" %>
                  :
@@ -25,10 +30,10 @@
         </div>
         <div class="einput">
             <asp:PlaceHolder runat="server" id="DataPlaceholder" />
-            <asp:ContentPlaceHolder runat="server" ID="Validation">
+                  
+        </div><asp:ContentPlaceHolder runat="server" ID="Validation">
                 <%= Html.ValidationMessage("") %>
-            </asp:ContentPlaceHolder>            
-        </div>
+            </asp:ContentPlaceHolder>      
         <div class="cbt"></div>
     </div>    
 </asp:PlaceHolder>

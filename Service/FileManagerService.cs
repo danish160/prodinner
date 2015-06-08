@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
 using Omu.Drawing;
@@ -9,34 +8,36 @@ namespace Omu.ProDinner.Service
 {
     public class FileManagerService : IFileManagerService
     {
-        private readonly string mealsPath = ConfigurationManager.AppSettings["storagePath"] + "/meals/";
-        private readonly string tempPath = ConfigurationManager.AppSettings["storagePath"] + "/temp/";
+        private const string MealsPath = "/meals/";
+        private const string TempPath = "/temp/";
 
-        public void DeleteImages(string filename)
+        public void DeleteImages(string root, string filename)
         {
-            File.Delete(mealsPath + filename);
-            File.Delete(mealsPath + "s" + filename);
-            File.Delete(mealsPath + "m" + filename);
+            var dirPath = root + MealsPath;
+            File.Delete(dirPath + filename);
+            File.Delete(dirPath + "s" + filename);
+            File.Delete(dirPath + "m" + filename);
         }
 
-        public void MakeImages(string filename, int x, int y, int w, int h)
+        public void MakeImages(string root, string filename, int x, int y, int w, int h)
         {
-            using (var image = Image.FromFile(tempPath + filename))
+            using (var image = Image.FromFile(root + TempPath + filename))
             {
+                var dirPath = root + MealsPath;
                 var img = Imager.Crop(image, new Rectangle(x, y, w, h));
                 var resized = Imager.Resize(img, 200, 150, true);
                 var small = Imager.Resize(img, 100, 75, true);
                 var mini = Imager.Resize(img, 45, 34, true);
-                Imager.SaveJpeg(mealsPath + filename, resized);
-                Imager.SaveJpeg(mealsPath + "s" + filename, small);
-                Imager.SaveJpeg(mealsPath + "m" + filename, mini);
+                Imager.SaveJpeg(dirPath + filename, resized);
+                Imager.SaveJpeg(dirPath + "s" + filename, small);
+                Imager.SaveJpeg(dirPath + "m" + filename, mini);
             }
         }
 
-        public string SaveTempJpeg(Stream inputStream, out int w, out int h)
+        public string SaveTempJpeg(string root, Stream inputStream, out int w, out int h)
         {
-            var g = Guid.NewGuid() + ".jpg";
-            var filePath = tempPath + g;
+            var fileName = Guid.NewGuid() + ".jpg";
+            var filePath = root + TempPath + fileName;
             using (var image = Image.FromStream(inputStream))
             {
                 var resized = Imager.Resize(image, 533, 400, true);
@@ -44,7 +45,7 @@ namespace Omu.ProDinner.Service
 
                 w = resized.Width;
                 h = resized.Height;
-                return g;
+                return fileName;
             }
         }
     }

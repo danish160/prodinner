@@ -7,7 +7,6 @@ using Omu.ProDinner.Core.Model;
 using Omu.ProDinner.Core.Repository;
 using Omu.ProDinner.Data;
 using Omu.ProDinner.Infra;
-using Omu.ProDinner.Service;
 using Omu.ProDinner.WebUI.Mappers;
 using Omu.ProDinner.WebUI.Dto;
 using Omu.ValueInjecter;
@@ -19,15 +18,15 @@ namespace Omu.ProDinner.Tests
         [Test]
         public void EntitiesToIntsTest()
         {
-            var s = new Dinner { Meals = new List<Meal> { new Meal { Id = 3 }, new Meal { Id = 7 } } };
+            var dinner = new Dinner { Meals = new List<Meal> { new Meal { Id = 3 }, new Meal { Id = 7 } } };
 
-            var t = new DinnerInput();
+            var dinnerInput = new DinnerInput();
 
-            t.InjectFrom<EntitiesToInts>(s);
+            dinnerInput.InjectFrom<EntitiesToInts>(dinner);
 
-            Assert.IsNotNull(t.Meals);
-            Assert.AreEqual(2, t.Meals.Count());
-            Assert.AreEqual(3, t.Meals.First());
+            Assert.IsNotNull(dinnerInput.Meals);
+            Assert.AreEqual(2, dinnerInput.Meals.Count());
+            Assert.AreEqual(3, dinnerInput.Meals.First());
         }
 
         [Test]
@@ -38,49 +37,48 @@ namespace Omu.ProDinner.Tests
             using (var scope = new TransactionScope())
             {
                 var repo = new Repo<Meal>(new DbContextFactory());
-                var m1 = new Meal { Name = "a" };
-                var m2 = new Meal { Name = "b" };
+                var meal1 = new Meal { Name = "a" };
+                var meal2 = new Meal { Name = "b" };
 
-                repo.Insert(m1);
-                repo.Insert(m2);
+                meal1 = repo.Insert(meal1);
+                meal2 = repo.Insert(meal2);
                 repo.Save();
 
-                var s = new DinnerInput { Meals = new List<int> { m1.Id, m2.Id } };
-                var t = new Dinner();
+                var dinnerInput = new DinnerInput { Meals = new List<int> { meal1.Id, meal2.Id } };
+                var dinner = new Dinner();
 
-                t.InjectFrom<IntsToEntities>(s);
+                dinner.InjectFrom<IntsToEntities>(dinnerInput);
 
-                Assert.IsNotNull(t.Meals);
-                Assert.AreEqual(2, t.Meals.Count);
-                Assert.AreEqual(m1.Id, t.Meals.First().Id);
+                Assert.IsNotNull(dinner.Meals);
+                Assert.AreEqual(2, dinner.Meals.Count);
+                Assert.AreEqual(meal1.Id, dinner.Meals.First().Id);
             }
         }
 
         [Test]
         public void NormalToNullables()
         {
-            var d = new Dinner {ChefId = 3};
-            var di = new DinnerInput();
+            var dinner = new Dinner { ChefId = 3 };
+            var dinnerInput = new DinnerInput();
 
-            di.InjectFrom<NormalToNullables>(d);
+            dinnerInput.InjectFrom<NormalToNullables>(dinner);
 
-            Assert.AreEqual(3, di.ChefId);
-            Assert.AreEqual(null, di.Start);
-            Assert.AreEqual(null, di.CountryId);
+            Assert.AreEqual(3, dinnerInput.ChefId);
+            Assert.AreEqual(null, dinnerInput.Start);
+            Assert.AreEqual(null, dinnerInput.CountryId);
         }
 
         [Test]
         public void NullablesToNormal()
         {
-            var di = new DinnerInput {ChefId = 3};
-            var d = new Dinner();
+            var dinnerInput = new DinnerInput { ChefId = 3 };
+            var dinner = new Dinner();
 
-            d.InjectFrom<NullablesToNormal>(di);
+            dinner.InjectFrom<NullablesToNormal>(dinnerInput);
 
-            Assert.AreEqual(3, d.ChefId);
-            Assert.AreEqual(0, d.CountryId);
-            Assert.AreEqual(default(DateTime), d.Start);
+            Assert.AreEqual(3, dinner.ChefId);
+            Assert.AreEqual(0, dinner.CountryId);
+            Assert.AreEqual(default(DateTime), dinner.Start);
         }
-        
     }
 }

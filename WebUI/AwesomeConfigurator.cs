@@ -1,5 +1,4 @@
-﻿using System.Web.Mvc;
-using Omu.Awesome.Mvc;
+﻿using Omu.AwesomeMvc;
 using Omu.ProDinner.Resources;
 
 namespace Omu.ProDinner.WebUI
@@ -8,24 +7,26 @@ namespace Omu.ProDinner.WebUI
     {
         public static void Configure()
         {
-            //ModelMetadataProviders.Current = new AwesomeModelMetadataProvider(); App_Start/MvcProjectAwesome.cs
+            Settings.Lookup.HighlightChange = true;
+            Settings.MultiLookup.HighlightChange = true;
 
-            Settings.PopupForm.ClientSideValidation = false;
-            Settings.Lookup.Interactive = true;
             Settings.GetText = GetTranslate;
         }
 
         private static string GetTranslate(string type, string key)
         {
-            if (type == "Confirm" && key == "Title") return "";
+            if (type == "Form.ConfirmOptions" && key == "Title") return "";
+            if (type == "Form.ConfirmOptions" && key == "Message") return @Mui.confirm_delete;
             if (type == "PopupForm" && key == "Title") return "";
             if (type == "Lookup" && key == "Title") return "";
+            if (type == "MultiLookup" && key == "Title") return "";
             switch (key)
             {
-                case "Cancel": return Mui.Cancel;
-                case "Yes": return Mui.Yes;
-                case "No": return Mui.No;
-                case "More": return Mui.more;
+                case "CancelText": return Mui.Cancel;
+                case "YesText": return Mui.Yes;
+                case "NoText": return Mui.No;
+                case "MoreText": return Mui.more;
+                case "SearchText": return Mui.Search;
             }
             return null;
         }

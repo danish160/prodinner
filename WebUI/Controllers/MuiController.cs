@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -21,11 +22,15 @@ namespace Omu.ProDinner.WebUI.Controllers
                                                     };
         public ActionResult Index()
         {
-            var c = Request.Cookies["lang"];
+            var cookie = Request.Cookies["lang"];
+            var selectedValue = cookie == null ? "auto" : cookie.Value;
 
-            var k = c == null ? "auto" : c.Value;
-            ViewBag.lang = langs[k];
-            return View();
+            return View(langs.Select(theme => new SelectListItem
+            {
+                Text = theme.Value,
+                Value = theme.Key,
+                Selected = theme.Key == selectedValue
+            }));
         }
 
         public ActionResult Langs()
@@ -36,7 +41,10 @@ namespace Omu.ProDinner.WebUI.Controllers
         [HttpPost]
         public ActionResult Change(string l)
         {
+            var period = 1;
+            if (l == "auto") period = -1;
             var aCookie = new HttpCookie("lang") { Value = l, Expires = DateTime.Now.AddYears(1) };
+
             Response.Cookies.Add(aCookie);
 
             return Content("");

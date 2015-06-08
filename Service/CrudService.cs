@@ -26,11 +26,11 @@ namespace Omu.ProDinner.Service
             return repo.Get(id);
         }
 
-        public virtual int Create(T e)
+        public virtual int Create(T item)
         {
-            repo.Insert(e);
+            var newItem = repo.Insert(item);
             repo.Save();
-            return e.Id;
+            return newItem.Id;
         }
 
         public void Save()

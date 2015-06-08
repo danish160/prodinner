@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Dinners grid view";
+}
+
+<h2>@Mui.host_a_dinner</h2>
+
+@(Html.Awe().InitPopupForm()
+            .Name("create")
+            .Group("dinner")
+            .Url(Url.Action("Create"))
+            .Success("itemCreated('DinnerGrid')")
+            .Fullscreen(true))
+
+@(Html.Awe().InitPopupForm()
+            .Name("edit")
+            .Group("dinner")
+            .Url(Url.Action("Edit"))
+            .Success("itemUpdated('DinnerGrid')")
+            .Fullscreen(true))
+
+@(Html.Awe().InitPopupForm()
+            .Name("delete")
+            .Url(Url.Action("Delete"))
+            .Success("itemDeleted('DinnerGrid')")
+            .Parameter("gridId", "DinnerGrid") 
+            .Height(200)
+            .Modal(true))
+
+<div class="bar">
+    <div style="float: right;">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+    <button type="button" onclick="awe.open('create')" class="awe-btn">@Mui.Create</button>
+</div>
+@(Html.Awe().Grid("DinnerGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Persistence(Persistence.Session)
+      .ColumnsPersistence(Persistence.Session)
+      .Resizable(true)
+      .Height(400)
+      .ColumnWidth(120)
+      .Nests(new Nest{ ButtonClass = "detailbtn", Url = Url.Action("Details") })
+      .Columns(
+          new Column{ClientFormat = "<div class='detailbtn'><i class='ui-icon ui-icon-triangle-1-e awe-il'></i> .Id</div>", Width = 80, Header = "Id", Resizable = false},
+          new Column{Name = "Name"},
+          new Column{Name = "Chef.FirstName,Chef.LastName", ClientFormat = ".ChefName", Header = "Chef"},          
+          new Column{Name = "Country.Name", ClientFormat = ".CountryName", Header = "Country"},
+          new Column{Name = "Address"},
+          new Column{Name = "Meals.Count", ClientFormat = ".MealsCount", Header = "Meals", Width = 80, Resizable = false},
+          new Column{ClientFormat = Utils.EditFormat("edit"), Width = 50, Resizable = false},
+          new Column{ClientFormatFunc = "deleteFormat('delete','DinnerGrid')", Width = 50, Resizable = false}))

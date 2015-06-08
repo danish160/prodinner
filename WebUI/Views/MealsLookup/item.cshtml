@@ -1,9 +1,0 @@
-﻿@model Meal
-<li class="ae-lookup-item mealitem" data-value="@Model.Id">
-<div>
-<span class="ae-lookup-mbtn fl">
-</span>
- @Model.Name
- </div>
- <img  src='@Url.Content("~/pictures/Meals/" + (string.IsNullOrEmpty(Model.Picture) ? "0.jpg" : Model.Picture))' class="thumb"  alt='picture' />  
-</li>
