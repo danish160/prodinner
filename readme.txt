@@ -24,7 +24,7 @@ at this moment everything should work but you might get generic GDI+ error when 
 go to properties of \WebUI\pictures folder and in security tab add full control rights for the IIS_IUSRS
 (on Win7 and 2008 server it's properties-> security tab -> Edit button -> Add button -> Advanced button -> Find Now button -> select IIS_IUSRS from the search results -> OK button -> OK button -> Full Control checkbox -> OK -> OK )
 
-
+ 
 ==================
 in _Layout.cshtml a js function is assigned to awe.err, this will show popup in the left bottom corner of the screen any time an ajax request to the server of an Awesome helperwill ecounter an error
 
