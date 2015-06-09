@@ -1,0 +1,15 @@
+Core/bin/
+packages/
+Resources/obj/
+Service/bin/
+Service/obj/
+Tests/bin/
+Tests/obj/
+WebUI/bin/
+WebUI/obj/
+Resources/bin/
+Infra/obj/
+Infra/bin/
+Data/obj/
+Data/bin/
+Core/obj/
